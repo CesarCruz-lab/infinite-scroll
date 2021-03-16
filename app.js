@@ -9,7 +9,17 @@ let numPage = 1
 
 async function getPosts() {
   const url = `https://jsonplaceholder.typicode.com/posts?_limit=5&_page=${numPage}`
-  const response = await fetch(url)
+  
+  const config = {
+    method: 'GET',
+    headers: {
+      'Content-type': 'aplication/json',
+      'Accept': 'aplication/json'
+    },
+    cache: 'no-cache'
+  }
+  
+  const response = await fetch(url, config)
   
   return response
 }
@@ -37,6 +47,8 @@ function generateTemplate(obj) {
 async function postsTemplate() {
   const posts = await redeemResponseData(getPosts())
   const elements = await generateTemplate(posts)
+  
+  numPage++
   return elements
 }
 
@@ -53,9 +65,7 @@ function showLoader() {
 }
  
 function removeLoader() {
-  setTimeout(
     loader.classList.remove('show-loader')
-  ,300)
 }
 
 // controle
@@ -67,11 +77,10 @@ async function addPostsInToDOM() {
 
 async function addNewPostsInToDOM() {
   showLoader()
-  numPage++
   
   const template = await postsTemplate()
   
-  removeLoader()
+  await removeLoader()
   addContentInToElementContainer(template)
 }
 
@@ -82,7 +91,7 @@ function handleScroll() {
     document.documentElement
     
   const isBottom = clientHeight + scrollTop 
-    >= scrollHeight - 5
+    >= scrollHeight - 1
     
   if (isBottom) {addNewPostsInToDOM()}
 }
