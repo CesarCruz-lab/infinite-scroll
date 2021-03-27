@@ -91,7 +91,7 @@ function handleScroll() {
     document.documentElement
     
   const isBottom = clientHeight + scrollTop 
-    >= scrollHeight - 1
+    >= scrollHeight - 2
     
   if (isBottom) {addNewPostsInToDOM()}
 }
